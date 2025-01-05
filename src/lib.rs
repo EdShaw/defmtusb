@@ -1,24 +1,11 @@
 //! `defmt` logger and USB transport layer.
-
-
-
 #![no_std]
-
-
-
-#![feature(type_alias_impl_trait)]
-
-
 
 mod buffer;
 mod controller;
 mod task;
 
-
-
-pub use task::{ run, logger, };
-
-
+pub use task::{logger, run};
 
 /// The restore state of the critical section.
 #[link_section = ".bss.defmt-usb.RESTORE"]
@@ -31,8 +18,6 @@ static mut TAKEN: bool = false;
 /// The `defmt` encoder.
 #[link_section = ".data.defmt-usb"]
 static mut ENCODER: defmt::Encoder = defmt::Encoder::new();
-
-
 
 /// The logger implementation.
 #[defmt::global_logger]
@@ -83,8 +68,6 @@ unsafe impl defmt::Logger for USBLogger {
         ENCODER.write(bytes, inner)
     }
 }
-
-
 
 fn inner(bytes: &[u8]) {
     // Get a reference to the buffers.
